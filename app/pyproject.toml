@@ -15,6 +15,10 @@ pydantic = "^2.9.1"
 psycopg2 = "^2.9.9"
 python-dotenv = "^1.0.1"
 faker = "^28.4.1"
+alembic = "^1.13.2"
+pydantic-settings = "^2.5.2"
+asyncpg = "^0.29.0"
+sqlalchemy-utils = "^0.41.2"
 
 
 [build-system]

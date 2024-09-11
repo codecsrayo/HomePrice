@@ -14,7 +14,7 @@ services:
 
     # Overrides default command so things don't shut down after the process ends.
     # command: sleep infinity
-    command: sh -c "cd /workspace/app && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    command: sh -c "cd /workspace/app && alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
 
 
 
