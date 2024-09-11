@@ -3,9 +3,23 @@ FROM mcr.microsoft.com/devcontainers/${IMAGE}
 
 ENV PYTHONUNBUFFERED 1
 
+# Install pip and poetry
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends postgresql-client \
-     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+    && apt-get -y install --no-install-recommends python3-pip \
+    && pip3 install poetry \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-COPY app/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Make sure poetry is in PATH
+ENV PATH="/root/.local/bin:$PATH"
+
+# Now configure and use poetry
+RUN poetry config virtualenvs.create false
+
+# Copy poetry files
+COPY app/pyproject.toml app/poetry.lock ./
+
+# Install dependencies
+RUN poetry install --no-interaction
+
+# Clean up
+RUN rm -rf /root/.cache/pypoetry
