@@ -31,7 +31,7 @@ class Restaurant(Base):
 
 
 # Connect to the database
-load_dotenv(".env")
+load_dotenv("../.env")
 DBUSER = os.environ["DBUSER"]
 DBPASS = os.environ["DBPASS"]
 DBHOST = os.environ["DBHOST"]
