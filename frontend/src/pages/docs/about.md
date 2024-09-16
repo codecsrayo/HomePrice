@@ -1,5 +1,6 @@
-<a href="/panel">Atrás</a>
-<a href="/">inicio</a>
+<a href="/">Inicio</a>
+<a href="/panel">Probar</a>
+
 
 # Diseño e Implementación del Proyecto
 ---
@@ -135,7 +136,8 @@ La implementación de técnicas de aprendizaje automático para la predicción d
 2. Park, B., & Bae, J. K. (2015). Using machine learning algorithms for housing price prediction.
 3. Pow, N., Janulewicz, E., & Liu, L. (2014). Applied machine learning project.
 
-<a href="/">Atrás</a>
+<a href="/">Inicio</a>
+<a href="/panel">Probar</a>
 
 <style>
   * {
@@ -147,6 +149,8 @@ La implementación de técnicas de aprendizaje automático para la predicción d
         padding: 4px;
         text-decoration: none;
         color: white;
+        font-size: 15px;
+        font-family: sans-serif;
     }
 
     a:focus,
