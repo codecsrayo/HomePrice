@@ -1,0 +1,106 @@
+---
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import Layout from "@layouts/Layout.astro";
+---
+
+<Layout title="Home">
+    <main>
+        <div class="grid">
+            <Header
+                Navigate={[
+                    { navigate: "/", title: "Inicio" },
+                    { navigate: "/docs/about", title: "Documentación" },
+                ]}
+            />
+            <aside class="page-leftbar">
+                <div class="content">
+                    <p>Leftbar</p>
+                </div>
+            </aside>
+            <main class="page-main">
+                <div class="content">
+                    <p>Main</p>
+                </div>
+            </main>
+            <Footer />
+        </div>
+    </main>
+</Layout>
+
+<style is:global>
+    html,
+    body {
+        height: 100%;
+        overflow: hidden; /* Evitar scroll */
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 200px auto;
+        grid-template-rows: 40px 1fr 20px;
+        grid-template-areas:
+            "header header"
+            "leftbar main"
+            "leftbar footer";
+        min-height: 100vh; /* Asegura que ocupe toda la altura */
+        column-gap: 3px;
+        row-gap: 2px;
+    }
+
+    .page-header {
+        grid-area: header;
+    }
+
+    .page-leftbar {
+        grid-area: leftbar;
+        overflow-y: auto;
+    }
+
+    .page-main {
+        grid-area: main;
+        overflow: auto;
+    }
+
+    .page-footer {
+        grid-area: footer;
+    }
+
+    .content {
+        color: #242424;
+        background: #242424;
+        font-weight: 600;
+        text-align: center;
+        box-sizing: border-box;
+        height: 100%;
+        padding: 10px;
+    }
+
+    /* Media Queries */
+    @media (max-width: 600px) {
+        .grid {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "header"
+                "main"
+                "leftbar"
+                "footer";
+        }
+    }
+
+    @media (min-width: 601px) and (max-width: 992px) {
+        .grid {
+            grid-template-columns: 150px auto;
+            grid-template-areas:
+                "header header"
+                "leftbar main"
+                "footer footer";
+        }
+    }
+
+    @media (min-width: 993px) {
+        .grid {
+            grid-template-columns: 200px auto;
+        }
+    }
+</style>

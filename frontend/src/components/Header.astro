@@ -1,0 +1,42 @@
+---
+interface Props {
+    Navigate: {
+        navigate: string;
+        title: string;
+    }[];
+}
+
+const { Navigate } = Astro.props;
+---
+
+<header class="page-header">
+    <div class="content">
+        <nav>
+            {Navigate.map((link) => <a href={link.navigate}>{link.title}</a>)}
+        </nav>
+    </div>
+</header>
+
+<style>
+    .content {
+        color: #242424;
+        /* background-color: #242424; */
+        font-weight: 600;
+        text-align: center;
+        box-sizing: border-box;
+        height: 40px;
+        padding: 10px;
+        text-align: end;
+    }
+    a {
+        padding: 4px;
+        text-decoration: none;
+        color: white;
+    }
+
+    a:focus,
+    a:hover {
+        border-bottom: 1px solid;
+        opacity: 80%;
+    }
+</style>
