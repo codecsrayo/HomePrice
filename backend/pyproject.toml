@@ -19,6 +19,7 @@ alembic = "^1.13.2"
 pydantic-settings = "^2.5.2"
 asyncpg = "^0.29.0"
 sqlalchemy-utils = "^0.41.2"
+fastapi-pagination = "^0.12.27"
 
 
 [build-system]

@@ -1,6 +1,7 @@
 ARG IMAGE=bullseye
 FROM mcr.microsoft.com/devcontainers/${IMAGE}
 
+
 ENV PYTHONUNBUFFERED 1
 
 # Install pip and poetry
@@ -16,10 +17,11 @@ ENV PATH="/root/.local/bin:$PATH"
 RUN poetry config virtualenvs.create false
 
 # Copy poetry files
-COPY app/pyproject.toml app/poetry.lock ./
+COPY backend/pyproject.toml backend/poetry.lock ./
 
 # Install dependencies
 RUN poetry install --no-interaction
 
 # Clean up
 RUN rm -rf /root/.cache/pypoetry
+WORKDIR /workspace/backend

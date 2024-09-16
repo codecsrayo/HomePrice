@@ -1,0 +1,19 @@
+FROM node:alpine3.20
+
+# Instalar dependencias
+RUN apk update && apk add yarn
+
+# Crear un nuevo usuario no root
+RUN adduser -D app
+
+# Asignar permisos a la carpeta de trabajo
+WORKDIR /workspace/frontend
+RUN chown -R app:app /workspace/frontend
+
+# Cambiar a usuario no root
+USER app
+
+# Establecer el contexto de trabajo
+WORKDIR /workspace/frontend
+
+# El resto de las instrucciones de tu Dockerfile...

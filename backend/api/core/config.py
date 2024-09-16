@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    API_V1_STR: str = "/api/v1"
+    API_V1_STR: str = "/api"
     PROJECT_NAME: str
     DATABASE_USER: str
     DATABASE_PASSWORD: str
@@ -45,4 +45,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-print(settings.ASYNC_DATABASE_URI)
