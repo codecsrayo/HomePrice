@@ -4,16 +4,51 @@ FROM node:alpine3.20
 RUN apk update && apk add yarn
 
 # Crear un nuevo usuario no root
-RUN adduser -D app
+# RUN adduser -D app
 
 # Asignar permisos a la carpeta de trabajo
 WORKDIR /workspace/frontend
-RUN chown -R app:app /workspace/frontend
-
+RUN chown -R node:node /workspace/frontend
+# RUN chmod -R 775 /workspace/frontend
 # Cambiar a usuario no root
-USER app
+USER node
 
 # Establecer el contexto de trabajo
-WORKDIR /workspace/frontend
 
-# El resto de las instrucciones de tu Dockerfile...
+
+# info Visit https://yarnpkg.com/en/docs/cli/create for documentation about this command.
+# /workspace/frontend $ yarn create astro app
+# yarn create v1.22.22
+# [1/4] Resolving packages...
+# [2/4] Fetching packages...
+# [3/4] Linking dependencies...
+# [4/4] Building fresh packages...
+# success Installed "create-astro@4.9.0" with binaries:
+# - create-astro
+# [############################################################] 60/60
+# astro   Launch sequence initiated.
+
+# ◼  dir Using app as project directory
+
+# tmpl   How would you like to start your new project?
+# Include sample files
+
+# ts   Do you plan to write TypeScript?
+# Yes
+
+# use   How strict should TypeScript be?
+# Strict
+
+# deps   Install dependencies?
+# Yes
+
+# git   Initialize a new git repository?
+# No
+# ◼  Sounds good! You can always run git init manually.
+
+# ██████  Project initializing...
+# ▶ Template copying...
+# □ TypeScript
+# □ Dependencies
+# ▲  error EACCES: permission denied, mkdir '/workspace/frontend/app'
+# ▲  error Unable to download template basics
