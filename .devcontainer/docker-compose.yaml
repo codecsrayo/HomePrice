@@ -18,6 +18,9 @@ services:
     command: sh -c "cd /workspace/backend && alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
     ports:
       - 8000:8000
+    networks:
+      - app-network
+
 
   frontend:
     tty: true
@@ -29,10 +32,11 @@ services:
 
     env_file:
       - ../.env
-    command: sh -c "cd /workspace/frontend && yarn run dev --host"
+    command: sh -c "cd /workspace/frontend && yarn install && yarn run dev --host"
     ports:
       - 4321:4321
-  
+    networks:
+      - app-network  
 
   
     # network_mode: service:db
@@ -48,6 +52,8 @@ services:
       POSTGRES_PASSWORD: 1
     expose:
       - 5432
+    networks:
+      - app-network
 
   pgadmin:
       container_name: PGADMIN
@@ -63,9 +69,17 @@ services:
         - 80:80
       depends_on:
         - db
+      networks:
+      - app-network
 
 
 volumes:
   postgres-data:
   pgadmin:
 
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
