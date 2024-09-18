@@ -1,4 +1,11 @@
 # run proyect
-## renane .env.example to .env
-## sudo apt install make
-## make up
+
+```bash
+
+sudo apt install make
+
+mv .env.example .env
+
+make up
+
+```
