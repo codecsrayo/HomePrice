@@ -32,7 +32,7 @@ services:
 
     env_file:
       - ../.env
-    command: sh -c "cd /workspace/frontend && yarn install && yarn run dev --host"
+    command: sh -c "cd /workspace/frontend && yarn install && yarn run dev --host 0.0.0.0"
     ports:
       - 4321:4321
     networks:
