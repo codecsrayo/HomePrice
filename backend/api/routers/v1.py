@@ -24,52 +24,135 @@ router = APIRouter()
 ResponseT = TypeVar("ResponseT", bound=Union[Property, Prediction])
 
 
-@router.post("/predict", response_model=IPostResponseBase[ResponseT])
+@router.post("/predict")
 async def predict(data: Property, db_session: AsyncSession = Depends(deps.get_db)):
 
-    id = uuid_pkg.uuid4()
-    save = await CRUDBase(Property).create(
-        db_session=db_session, obj_in=data.model_dump(exclude={"id"}), created_by_id=id
-    )
+    print(ResponseT)
+    return {
+  "id": "64b2f871-dfb5-4023-9c6f-9e765f5fa8a9",
+  "address": "123 Main St",
+  "city": "Springfield",
+  "state": "IL",
+  "zip_code": "62704",
+  "bedrooms": 3,
+  "bathrooms": 2,
+  "square_feet": 1500,
+  "lot_size": 5000,
+  "year_built": 1990,
+  "property_type": "Single Family Home",
+  "price": 250000,
+  "predicted_price": 275000,
+  "prediction_date": "2024-09-22T10:00:00Z",
+  "features": [
+    {
+      "id": "76a1f97e-9bde-4f8e-a49b-5b97f1d207a6",
+      "feature_name": "Garage",
+      "feature_value": "2 Car"
+    },
+    {
+      "id": "c6bf0fb9-ec6d-4f34-86db-20c1baf7e27a",
+      "feature_name": "Pool",
+      "feature_value": "In-ground"
+    }
+  ],
+  "ml_model_predictions": [
+    {
+      "ml_model": {
+        "ml_model_tag": "RandomForest",
+        "ml_model_version": "1.0.0",
+        "created_at": "2024-09-20T08:30:00Z"
+      }
+    }
+  ]
+}
 
-    prediction = Prediction(
-            property_id=id,
-            predicted_price=0.1,
-            # prediction_date=datetime.now(),
-            # property="test",
-            # model_predictions="550e8400-e29b-41d4-a716-446655440009"
-        )
-    print(prediction)
-    await CRUDBase(Prediction).create(
-        db_session=db_session, obj_in=prediction, created_by_id=id)
-    return IPostResponseBase[ResponseT](data=save)
 
 
-@router.get("/predict/{id}", response_model=IGetResponseBase[ResponseT])
-async def get_predict(
-    id: uuid_pkg.UUID, db_session: AsyncSession = Depends(deps.get_db)
+@router.get("/predict/history")
+async def get_all_predict(
+    db_session: AsyncSession = Depends(deps.get_db)
 ):
+    return {
+  "total": 2,
+  "items": [
+    {
+      "id": "64b2f871-dfb5-4023-9c6f-9e765f5fa8a9",
+      "address": "123 Main St",
+      "city": "Springfield",
+      "state": "IL",
+      "zip_code": "62704",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "square_feet": 1500,
+      "lot_size": 5000,
+      "year_built": 1990,
+      "property_type": "Single Family Home",
+      "price": 250000,
+      "predicted_price": 275000,
+      "prediction_date": "2024-09-22T10:00:00Z",
+      "features": [
+        {
+          "id": "76a1f97e-9bde-4f8e-a49b-5b97f1d207a6",
+          "feature_name": "Garage",
+          "feature_value": "2 Car"
+        },
+        {
+          "id": "c6bf0fb9-ec6d-4f34-86db-20c1baf7e27a",
+          "feature_name": "Pool",
+          "feature_value": "In-ground"
+        }
+      ],
+      "ml_model_predictions": [
+        {
+          "ml_model": {
+            "ml_model_tag": "RandomForest",
+            "ml_model_version": "1.0.0",
+            "created_at": "2024-09-20T08:30:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": "21b2e771-bdf5-4419-b2cf-2e46415d93a0",
+      "address": "456 Elm St",
+      "city": "Springfield",
+      "state": "IL",
+      "zip_code": "62705",
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "square_feet": 2000,
+      "lot_size": 8000,
+      "year_built": 1985,
+      "property_type": "Single Family Home",
+      "price": 350000,
+      "predicted_price": 365000,
+      "prediction_date": "2024-09-15T14:30:00Z",
+      "features": [
+        {
+          "id": "f5f25b4d-a6e7-421a-83d1-295e39f7d84b",
+          "feature_name": "Fireplace",
+          "feature_value": "Wood Burning"
+        },
+        {
+          "id": "2f13491d-5fa1-4a1f-85f5-56bb0a5f8d92",
+          "feature_name": "Deck",
+          "feature_value": "Large"
+        }
+      ],
+      "ml_model_predictions": [
+        {
+          "ml_model": {
+            "ml_model_tag": "LinearRegression",
+            "ml_model_version": "2.0.0",
+            "created_at": "2024-09-10T11:00:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}
 
-    # Consulta de la propiedad
-    query_property = await CRUDBase(Property).get(db_session=db_session, id=id)
 
-    # Consulta de la predicción relacionada con la propiedad
-    query_prediction = await CRUDBase(Prediction).get(
-        db_session=db_session,
-        id=id,
-        query=select(Prediction).where(Prediction.property_id == id),
-    )
-
-    # Verificar que ambos resultados existan
-    query_result = query_property is not None and query_prediction is not None
-    print(query_result)
-
-    # Si ambos existen, combinar los resultados
-    if query_result:
-        # Combinar los resultados en ResponseT
-        query_result = ResponseT(**property_data, **prediction_data)
-
-    # Devolver la respuesta usando IGetResponseBase
-    return IGetResponseBase[ResponseT](data=query_result)
+   
 
 
