@@ -4,7 +4,10 @@ import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout title="Binvenido a precios de viviendas">
-    <Header Navigate={[{ navigate: "/docs/about", title: "Documentación" }]} />
+    <Header
+        Navigate={[{ navigate: "/docs/about", title: "Documentación" }]}
+   
+    />
     <div class="container">
         <header>
             <div class="header-content">
@@ -28,8 +31,6 @@ import Layout from "@layouts/Layout.astro";
                 urbano y la transparencia en el mercado inmobiliario.
             </p>
         </main>
-
-        <div class="circle"></div>
     </div>
 </Layout>
 <style>
@@ -118,6 +119,7 @@ import Layout from "@layouts/Layout.astro";
         margin: 0 auto;
         text-align: center;
         font-size: 1.1rem;
+        font-size: medium;
     }
 
     /* Estilos responsivos */
@@ -140,9 +142,5 @@ import Layout from "@layouts/Layout.astro";
         .stat {
             justify-content: center;
         }
-    }
-
-    .description {
-        font-size: medium;
     }
 </style>
