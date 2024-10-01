@@ -43,39 +43,47 @@ const FormComponent = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} class="border border-white p-4 h-[500px] overflow-y-auto">
-      <h2 class="text-white text-sm uppercase">Anuncia tu propiedad</h2>
-      <p class="text-white italic text-xs mt-5 mb-4">
-        Ingresa los detalles a continuación para averiguar el valor de tu propiedad.
-      </p>
-      <div class="flex flex-wrap -mx-2">
-        <For each={formFields}>
-          {(field, index) => (
-            <div
-              class={`w-1/2 px-2 mb-4 ${index() % 2 === 0 ? 'pr-2' : 'pl-2'}`}
-            >
-              <label for={field.label} class="block text-left text-xs uppercase mb-1 text-white">
-                {field.label}
-              </label>
-              <input
-                class="w-full h-8 px-2 bg-gray-300 rounded"
-                type={field.type}
-                id={field.label}
-                name={field.label}
-                placeholder={field.placeholder}
-                required
-              />
-            </div>
-          )}
-        </For>
-      </div>
-      <button
-        type="submit"
-        class="mt-5 px-4 py-2 bg-orange-600 text-white rounded hover:opacity-80 text-xs uppercase"
-      >
-        Consultar
-      </button>
-    </form>
+    <div class='flex place-content-center mt-10 min-w-[500px]'>
+      <form onSubmit={handleSubmit} class="border border-white p-4 h-[500px] overflow-y-auto  w-[50%] ">
+        <h2 class="text-white text-sm uppercase text-center">Conoce tu propiedad</h2>
+        <p class="text-white italic text-xs mt-5 mb-4 text-center">
+          Ingresa los detalles a continuación para averiguar el valor de tu propiedad.
+        </p>
+        <div class="flex flex-wrap -mx-2">
+          <For each={formFields}>
+            {(field, index) => (
+              <div
+                class={`w-1/2 px-2 mb-4 ${index() % 2 === 0 ? 'pr-2' : 'pl-2'}`}
+              >
+                <label for={field.label} class="block text-left text-xs uppercase mb-1 text-white">
+                  {field.label}
+                </label>
+                <input
+                  class="w-full h-8 px-2 bg-gray-300 rounded"
+                  type={field.type}
+                  id={field.label}
+                  name={field.label}
+                  placeholder={field.placeholder}
+                  required
+                />
+              </div>
+            )}
+          </For>
+        </div>
+
+        <div class="flex place-content-center">
+          <button
+            type="submit"
+            class="mt-5 px-4 py-2 w-fit bg-orange-600 text-white rounded hover:opacity-80 text-xs uppercase"
+          >
+            Consultar
+          </button>
+        </div>
+       
+      </form>
+
+    </div>
+    
   );
 };
 

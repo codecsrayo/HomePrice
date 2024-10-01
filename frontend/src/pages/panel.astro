@@ -1,10 +1,8 @@
 ---
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
-import Aside from "@components/panel/Aside.jsx";
-import ButtonNewChat from "@components/panel/ButtonNewChat.astro";
-import Form from "@components/panel/Form.jsx"
-import Historical from "@components/panel/Historical.astro";
+import PanelBase from "@components/panel/Panel.jsx";
+
 import Layout from "@layouts/Layout.astro";
 import data from "demo.json";
 
@@ -21,16 +19,11 @@ const navItems: NavItem[] = [
 
 <Layout title="Panel">
     <div class="grid">
-        <Header Navigate={navItems}>
-            <ButtonNewChat />
-        </Header>
-        <Aside client:visible data={data} />
-        <main class="page-main">
-            <div class="content-form">
-                <Form client:only="solid-js" />
-                <Historical client:load />
-            </div>
+        <Header Navigate={navItems} />
+        <main>
+            <PanelBase client:only="solid-js" data={data} />
         </main>
+
         <Footer />
     </div>
 </Layout>
@@ -48,8 +41,8 @@ const navItems: NavItem[] = [
         grid-template-rows: 40px 1fr 30px;
         grid-template-areas:
             "header header"
-            "leftbar main"
-            "leftbar footer";
+            "main main"
+            "footer footer";
         min-height: 100vh;
         column-gap: 3px;
         row-gap: 2px;
@@ -64,25 +57,11 @@ const navItems: NavItem[] = [
         overflow-y: auto;
     }
 
-    .page-main {
-        grid-area: main;
-        overflow: auto;
-    }
-
     .page-footer {
         grid-area: footer;
     }
 
     .content {
-        color: #242424;
-        background: #242424;
-        font-weight: 600;
-        text-align: center;
-        box-sizing: border-box;
-        height: 100%;
-        padding: 10px;
-    }
-    .content-form {
         color: #242424;
         background: #242424;
         font-weight: 600;
@@ -99,7 +78,6 @@ const navItems: NavItem[] = [
             grid-template-areas:
                 "header"
                 "main"
-                "leftbar"
                 "footer";
         }
     }
@@ -109,7 +87,7 @@ const navItems: NavItem[] = [
             grid-template-columns: 150px auto;
             grid-template-areas:
                 "header header"
-                "leftbar main"
+                "main main"
                 "footer footer";
         }
     }
