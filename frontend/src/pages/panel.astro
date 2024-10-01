@@ -3,7 +3,7 @@ import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
 import Aside from "@components/panel/Aside.jsx";
 import ButtonNewChat from "@components/panel/ButtonNewChat.astro";
-import Form from "@components/panel/Form.tsx";
+import Form from "@components/panel/Form.jsx"
 import Historical from "@components/panel/Historical.astro";
 import Layout from "@layouts/Layout.astro";
 import data from "demo.json";
@@ -27,8 +27,8 @@ const navItems: NavItem[] = [
         <Aside client:visible data={data} />
         <main class="page-main">
             <div class="content-form">
-                <Form client:load />
-                <Historical client:load/>
+                <Form client:only="solid-js" />
+                <Historical client:load />
             </div>
         </main>
         <Footer />
