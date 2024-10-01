@@ -1,5 +1,4 @@
 ---
-import PlusIcon from "@icons/PlusIcon.astro";
 interface Props {
     Navigate: {
         navigate: string;
@@ -12,25 +11,22 @@ const { Navigate } = Astro.props;
 
 <header class="page-header">
     <div class="content">
-        <div class="content-1">
-            <button class="btn-icon"><PlusIcon /></button>
-        </div>
+        <slot />
         <nav>
-            {Navigate.map((link) => <a href={link.navigate}>{link.title}</a>)}
+            {
+                Navigate.map((link) => (
+                    <a href={link.navigate}>
+                        {link.title}
+                    </a>
+                ))
+            }
         </nav>
     </div>
 </header>
-
 <style>
     header {
         display: flex;
         flex-grow: 100;
-    }
-    .content-1 {
-        display: flex;
-        flex-grow: 100;
-        height: 10px;
-        padding-left: 176px;
     }
 
     .content {
@@ -56,25 +52,6 @@ const { Navigate } = Astro.props;
     a:focus,
     a:hover {
         border-bottom: 1px solid;
-        opacity: 80%;
-    }
-
-    .btn-icon {
-        display: flex;
-        border: none;
-        flex-direction: column;
-        align-items: center;
-        align-items: center;
-        padding: 3px;
-        margin-bottom: 10px;
-        height: 20px;
-        width: 30px;
-        background: #ff5722;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .btn-icon:hover{
         opacity: 80%;
     }
 </style>
