@@ -1,0 +1,45 @@
+---
+import PlusIcon from "@icons/PlusIcon.astro";
+---
+
+<div class="content-1">
+    <button class="btn-icon"><PlusIcon /></button>
+</div>
+<script>
+    const $button = document.querySelector(".btn-icon");
+    const $form = document.querySelector("form");
+    const $historical = document.querySelector(".historical") as HTMLElement;
+    if ($button && $form && $historical) {
+        $button.addEventListener("click", () => {
+            $historical.style.visibility = "hidden";
+            $form.style.visibility = "visible";
+        });
+    }
+</script>
+<style>
+    .content-1 {
+        display: flex;
+        flex-grow: 100;
+        height: 10px;
+        padding-left: 176px;
+    }
+
+    .btn-icon {
+        display: flex;
+        border: none;
+        flex-direction: column;
+        align-items: center;
+        align-items: center;
+        padding: 3px;
+        margin-bottom: 10px;
+        height: 20px;
+        width: 30px;
+        background: #ff5722;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-icon:hover {
+        opacity: 80%;
+    }
+</style>
