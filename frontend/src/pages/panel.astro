@@ -1,47 +1,40 @@
 ---
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
+import Aside from "@components/panel/Aside.jsx";
+import ButtonNewChat from "@components/panel/ButtonNewChat.astro";
+import Form from "@components/panel/Form.tsx";
+import Historical from "@components/panel/Historical.astro";
 import Layout from "@layouts/Layout.astro";
-import Form from "@components/Form.astro"
+import data from "demo.json";
 
 interface NavItem {
     navigate: string;
     title: string;
 }
 
-
-
 const navItems: NavItem[] = [
     { navigate: "/", title: "Inicio" },
     { navigate: "/docs/about", title: "Documentación" },
 ];
-
-
 ---
 
 <Layout title="Panel">
     <div class="grid">
-        <Header Navigate={navItems} />
-        <aside class="page-leftbar">
-            <div class="content">
-                <div class="history-chat">
-                    <p
-                        class="message"
-                        title="consult nknfklnmdkfmdlkfmdfdlmldfmdl,ñdf"
-                    >
-                        consult nknfklnmdkfmdlkfmdfdlmldfmdl,ñdf
-                    </p>
-                </div>
-            </div>
-        </aside>
+        <Header Navigate={navItems}>
+            <ButtonNewChat />
+        </Header>
+        <Aside client:visible data={data} />
         <main class="page-main">
-            <div class="content">
-                <Form/>
+            <div class="content-form">
+                <Form client:load />
+                <Historical client:load/>
             </div>
         </main>
         <Footer />
     </div>
 </Layout>
+
 <style is:global>
     html,
     body {
@@ -89,6 +82,15 @@ const navItems: NavItem[] = [
         height: 100%;
         padding: 10px;
     }
+    .content-form {
+        color: #242424;
+        background: #242424;
+        font-weight: 600;
+        text-align: center;
+        box-sizing: border-box;
+        height: 100%;
+        padding: 10px;
+    }
 
     /* Media Queries */
     @media (max-width: 600px) {
@@ -122,34 +124,10 @@ const navItems: NavItem[] = [
         overflow-x: hidden;
         overflow-y: auto;
     }
-    .history-chat {
-        display: flex;
-        text-wrap: nowrap;
-        font-size: small;
-        font-family: Arial, Helvetica, sans-serif;
-        text-align: left;
-        color: white;
-        background-color: rgb(78, 76, 76);
-        padding: 10px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-    .history-chat:hover {
-        opacity: 80%;
-    }
-    .message {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
 
     .page-main > .content {
         display: flex;
         place-content: center;
         padding: 100px;
     }
-
-    
 </style>
