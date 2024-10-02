@@ -1,62 +1,150 @@
-#bin/bash
-# Variables
-COMPOSE_FILE = ".devcontainer/docker-compose.yaml"
-DOCKER_COMPOSE =  docker compose -f $(COMPOSE_FILE)
-DB_SERVICE = db
-APP_SERVICE = backend
+# Makefile for Development Environment
+
+# Environment variables
+DEVELOPMENT_ENVIRONMENT := true
+COMPOSE_FILE_PROD := .devcontainer/docker-compose.yaml
+COMPOSE_FILE_DEV := .devcontainer/docker-compose.dev.yaml
+
+# Determine the environment (production or development)
+ifeq ($(DEVELOPMENT_ENVIRONMENT),true)
+    ENV := DEV
+else
+    ENV := PROD
+endif
+
+# Set the appropriate Docker Compose file
+DOCKER_COMPOSE := docker compose -f $(COMPOSE_FILE_$(ENV))
+
+# Service names
+DB_SERVICE := db
+APP_SERVICE := backend
+
+# Default target
+.PHONY: all
+all: setup validate-certs
+
+# Setup target
+.PHONY: setup
+setup:
+	@echo "Setting up development environment..."
+	@if [ ! -f .devcontainer/.env ]; then \
+		cd .devcontainer && cp .env.example .env; \
+		echo ".env file created from .env.example"; \
+	else \
+		echo ".env file already exists"; \
+	fi
 
 
+.PHONY: validate-certs
+validate-certs:
+	@if [ "$(ENV)" != "DEV" ]; then \
+		echo "Entorno de producción saltando la generación de certificados autofirmados.."; \
+		exit 1; \
+	fi
+	@mkdir -p .devcontainer/configuration/tls/
+	@echo 'tls:\n  stores:\n    default:\n      defaultCertificate:\n        certFile: .devcontainer/configuration/tls/dev.localhost.pem\n        keyFile: .devcontainer/configuration/tls/dev.localhost-key.pem' > .devcontainer/configuration/certificates.yml
+	@if [ ! -f ".devcontainer/configuration/tls/dev.localhost.pem" ]; then \
+		wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64 && \
+		sudo mv mkcert-v1.4.4-linux-amd64 /usr/bin/mkcert && \
+		sudo chmod +x /usr/bin/mkcert && \
+		mkcert -install && \
+		cd .devcontainer/configuration/tls/ && \
+		mkcert 'dev.localhost' && \
+		chmod 600 .devcontainer/configuration/tls/dev.localhost*; \
+	else \
+		echo "Certificados TLS ya existen. Saltando creación."; \
+	fi
 
-# Comandos básicos para Docker Compose
+
+# Docker Compose commands
+.PHONY: up down restart build logs
+
 up:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) up -d
-	@echo "Servicios levantados"
+	@echo "Services started in $(ENV)"
 
 down:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) down
-	@echo "Servicios detenidos"
+	@echo "Services stopped in $(ENV)"
 
 restart:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) down
 	@$(DOCKER_COMPOSE) up -d
-	@echo "Servicios reiniciados"
+	@echo "Services restarted in $(ENV)"
+
+build:
+	@$(MAKE) all
+	@$(DOCKER_COMPOSE) build
+	@echo "Images rebuilt"
 
 logs:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) logs -f $(APP_SERVICE)
 
-# Ejecutar migraciones Alembic
+# Database and migration commands
+.PHONY: migrate migrate-status migrate-pending
+
 migrate:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic upgrade head
-	@echo "Migraciones ejecutadas"
+	@echo "Migrations executed"
 
-# Ver el estado de las migraciones
 migrate-status:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic current
-	@echo "Estado de las migraciones"
+	@echo "Migration status"
 
-# Construir la imagen nuevamente
-build:
-	@$(DOCKER_COMPOSE) build
-	@echo "Imágenes reconstruidas"
+migrate-pending:
+	@$(MAKE) all
+	@$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic history --verbose
+	@echo "Pending migrations"
 
-# Abrir una shell en el contenedor de la aplicación
+# Shell access
+.PHONY: shell-app shell-db
+
 shell-app:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) exec $(APP_SERVICE) sh
 
-# Abrir una shell en el contenedor de la base de datos
 shell-db:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) exec $(DB_SERVICE) sh
 
-# Ver las migraciones pendientes
-migrate-pending:
-	@$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic history --verbose
-	@echo "Migraciones pendientes"
+# Clean environment
+.PHONY: clean
 
-# Eliminar todos los volúmenes y limpiar el entorno
 clean:
+	@$(MAKE) all
 	@$(DOCKER_COMPOSE) down -v
-	@echo "Servicios y volúmenes eliminados"
+	@echo "Services and volumes removed"
 
-# Aplicar las migraciones y levantar el servidor
+# Start application
+.PHONY: start-app
+
 start-app:
 	@$(DOCKER_COMPOSE) exec $(APP_SERVICE) sh -c "alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+
+
+
+# Help target
+.PHONY: help
+
+help:
+	@echo "Available targets:"
+	@echo "  setup         - Set up the development environment"
+	@echo "  up            - Start the Docker containers"
+	@echo "  down          - Stop the Docker containers"
+	@echo "  restart       - Restart the Docker containers"
+	@echo "  build         - Build the Docker images"
+	@echo "  logs          - View container logs"
+	@echo "  migrate       - Run database migrations"
+	@echo "  migrate-status- Check the status of migrations"
+	@echo "  migrate-pending- View pending migrations"
+	@echo "  shell-app     - Open a shell in the app container"
+	@echo "  shell-db      - Open a shell in the database container"
+	@echo "  clean         - Remove all services and volumes"
+	@echo "  start-app     - Apply migrations and start the server"
+	@echo "  help          - Show this help message"
