@@ -21,10 +21,5 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 
-# @app.get("/api", include_in_schema=False)
-# async def main():
-#     """Redireccionar desde / a /docs"""
-#     return RedirectResponse(url=f"{settings.API_V1_STR}/docs")
-
 
 app.include_router(registed_routers, prefix=f"{settings.API_V1_STR}/v1")
