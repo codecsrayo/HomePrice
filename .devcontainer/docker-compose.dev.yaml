@@ -1,0 +1,134 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: "traefik:latest"
+    command:
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secure.address=:443
+      - --providers.docker=true
+      - --providers.file.directory=/configuration/
+      - --providers.file.watch=true
+      - --entrypoints.web.http.redirections.entryPoint.to=web-secure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=http
+      - --api=false
+      # - --api.insecure=false
+      - --log.level=DEBUG
+
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./configuration/:/configuration/"
+      - "./configuration/tls/:/configuration/tls/"
+
+    labels:
+      - "traefik.http.routers.dashboard.rule=Host(`${DOMAIN}`)  && PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+
+    networks:
+      - app-network
+
+  backend:
+    tty: true
+    depends_on:
+      - db
+    restart: unless-stopped  
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.backend
+      args:
+        IMAGE: python:3.11
+
+    volumes:
+      - ..:/workspace:cached
+
+    env_file:
+      - .env
+    command: sh -c "cd /workspace/backend && alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    expose:
+      - 8000
+    ports:
+     - 8000:8000
+    networks:
+      - app-network
+    labels:
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      - "traefik.http.routers.backend.rule=Host(`${DOMAIN}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.tls=true"
+
+
+  frontend:
+    tty: true
+    restart: unless-stopped
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.frontend
+    volumes:
+      - ..:/workspace:cached
+
+    env_file:
+      - .env
+    command: sh -c "cd /workspace/frontend && yarn install && yarn run dev --host 0.0.0.0"
+    expose:
+      - 4321
+    networks:
+      - app-network  
+    labels:
+      - "traefik.http.services.frontend.loadbalancer.server.port=4321"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.frontend.tls=true"
+
+  #   # network_mode: service:db
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: hostPrice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    expose:
+      - 5432
+    networks:
+      - app-network
+
+
+  pgadmin:
+      container_name: PGADMIN
+      image: dpage/pgadmin4:latest
+      restart: unless-stopped
+      env_file:
+        -  .env
+      expose:
+        - 80
+      depends_on:
+        - db
+      networks:
+        - app-network
+      labels:
+        - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+        - "traefik.http.routers.pgadmin.rule=Host(`${DOMAIN}`) && PathPrefix(`/db`)"
+        - "traefik.http.routers.pgadmin.tls=true"
+      volumes:
+        - pgadmin:/var/lib/pgadmin
+
+
+volumes:
+  postgres-data:
+  pgadmin:
+
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 160.19.0.0/16
