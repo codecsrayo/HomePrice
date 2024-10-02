@@ -1,27 +1,69 @@
 services:
+  traefik:
+    image: "traefik:latest"
+    command:
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secure.address=:443
+      - --providers.docker=true
+      - --providers.file.watch=true
+      - --entrypoints.web.http.redirections.entryPoint.to=web-secure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --api=false
+      # - --api.insecure=false
+      - --log.level=DEBUG
+      - --certificatesresolvers.myresolver.acme.email=codecsrayo@gmail.com
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    labels:
+      - "traefik.http.routers.dashboard.rule=Host(`${DOMAIN}`) && PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
+    networks:
+      - app-network
+
   backend:
     tty: true
+    depends_on:
+      - db
+    restart: unless-stopped  
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile.backend
       args:
-        # [Choice] Python version: 3, 3.8, 3.7, 3.6
         IMAGE: python:3.11
 
     volumes:
       - ..:/workspace:cached
 
     env_file:
-      - ../.env
+      - .env
     command: sh -c "cd /workspace/backend && alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    expose:
+      - 8000
     ports:
-      - 8000:8000
+     - 8000:8000
     networks:
       - app-network
+    labels:
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      - "traefik.http.routers.backend.rule=Host(`${DOMAIN}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
 
 
   frontend:
     tty: true
+    restart: unless-stopped
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile.frontend
@@ -29,15 +71,19 @@ services:
       - ..:/workspace:cached
 
     env_file:
-      - ../.env
+      - .env
     command: sh -c "cd /workspace/frontend && yarn install && yarn run dev --host 0.0.0.0"
-    ports:
-      - 4321:4321
+    expose:
+      - 4321
     networks:
       - app-network  
+    labels:
+      - "traefik.http.services.frontend.loadbalancer.server.port=4321"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
 
-  
-    # network_mode: service:db
+  #   # network_mode: service:db
 
   db:
     image: postgres:latest
@@ -53,27 +99,32 @@ services:
     networks:
       - app-network
 
+
   pgadmin:
       container_name: PGADMIN
       image: dpage/pgadmin4:latest
       restart: unless-stopped
       env_file:
-        -  ../.env
-
-
-      volumes:
-        - pgadmin:/var/lib/pgadmin
-      ports:
-        - 80:80
+        -  .env
+      expose:
+        - 80
       depends_on:
         - db
       networks:
-      - app-network
+        - app-network
+      labels:
+        - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+        - "traefik.http.routers.pgadmin.rule=Host(`${DOMAIN}`) && PathPrefix(`/db`)"
+        - "traefik.http.routers.pgadmin.tls=true"
+        - "traefik.http.routers.pgadmin.tls.certresolver=myresolver"
+      volumes:
+        - pgadmin:/var/lib/pgadmin
 
 
 volumes:
   postgres-data:
   pgadmin:
+
 
 networks:
   app-network:

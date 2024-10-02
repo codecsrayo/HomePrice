@@ -4,3 +4,4 @@ __pycache__/
 .tmp/*
 .devcontainer/configuration
 
+.devcontainer/letsencrypt/acme.json
