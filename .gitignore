@@ -2,6 +2,5 @@ __pycache__/
 .azure
 .env
 .tmp/*
-.devcontainer/configuration/certificates.yml
-.devcontainer/configuration/tls/dev.localhost-key.pem
-.devcontainer/configuration/tls/dev.localhost.pem
+.devcontainer/configuration
+
