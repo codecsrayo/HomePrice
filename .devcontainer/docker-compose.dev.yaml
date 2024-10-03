@@ -10,7 +10,6 @@ services:
       - --entrypoints.web.http.redirections.entryPoint.to=web-secure
       - --entrypoints.web.http.redirections.entryPoint.scheme=http
       - --api=false
-      # - --api.insecure=false
       - --log.level=DEBUG
 
     env_file:
@@ -21,8 +20,6 @@ services:
       - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./configuration/:/configuration/"
-      - "./configuration/tls/:/configuration/tls/"
 
     labels:
       - "traefik.http.routers.dashboard.rule=Host(`${DOMAIN}`)  && PathPrefix(`/dashboard`)"
@@ -81,8 +78,6 @@ services:
       - "traefik.http.services.frontend.loadbalancer.server.port=4321"
       - "traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.frontend.tls=true"
-
-  #   # network_mode: service:db
 
   db:
     image: postgres:latest
