@@ -27,9 +27,9 @@ ResponseT = TypeVar("ResponseT", bound=Union[Property, Prediction])
 @router.post("/predict")
 async def predict(data: Property, db_session: AsyncSession = Depends(deps.get_db)):
 
-    print(ResponseT)
+
     return {
-  "id": "64b2f871-dfb5-4023-9c6f-9e765f5fa8a9",
+  "id": uuid_pkg.uuid4(),
   "address": "123 Main St",
   "city": "Springfield",
   "state": "IL",
