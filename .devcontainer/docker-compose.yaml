@@ -50,8 +50,6 @@ services:
     command: sh -c "cd /workspace/backend && alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
     expose:
       - 8000
-    ports:
-     - 8000:8000
     networks:
       - app-network
     labels:
