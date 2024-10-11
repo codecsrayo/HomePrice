@@ -79,8 +79,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         params: Optional[Params] = Params(),
         query: Optional[Union[T, Select[T], SelectOfScalar[T]]] = None
     ) -> Page[ModelType]:
-        if not query:
-            query = self.model
+        # if not query:
+        #     query = self.model
         return await paginate(db_session, query, params)
 
     async def create(
@@ -88,7 +88,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_session: AsyncSession,
         *,
         obj_in: Union[CreateSchemaType, ModelType],
-        created_by_id: Optional[Union[UUID, str]] = None
     ) -> ModelType:
         db_obj = self.model.model_validate(obj_in)
         db_session.add(db_obj)

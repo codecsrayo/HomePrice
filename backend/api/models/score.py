@@ -9,7 +9,6 @@ from .id import BaseUUIDModel
 
 class Property(BaseUUIDModel, table=True):
     __tablename__ = "properties"
-    
     address: str
     city: str
     state: str
@@ -25,14 +24,7 @@ class Property(BaseUUIDModel, table=True):
     features: list["Feature"] = Relationship(back_populates="property")
     predictions: list["Prediction"] = Relationship(back_populates="property")
 
-class Feature(BaseUUIDModel, table=True):
-    __tablename__ = "features"
-    
-    property_id: uuid_pkg.UUID = Field(foreign_key="properties.id")
-    feature_name: str
-    feature_value: Optional[str] = None
-    
-    property: Property = Relationship(back_populates="features")
+
 
 class Prediction(BaseUUIDModel, table=True):
     __tablename__ = "predictions"
@@ -48,6 +40,14 @@ class Prediction(BaseUUIDModel, table=True):
         back_populates="prediction"
     )
 
+class Feature(BaseUUIDModel, table=True):
+    __tablename__ = "features"
+    
+    property_id: uuid_pkg.UUID = Field(foreign_key="properties.id")
+    feature_name: str
+    feature_value: Optional[str] = None
+    
+    property: Property = Relationship(back_populates="features")
 class MLModel(BaseUUIDModel, table=True):
     __tablename__ = "ml_models"
     
