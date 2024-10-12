@@ -254,7 +254,7 @@ const SideNav = () => {
 
 
     const activeClass = (propertyID: string) =>
-        id() === propertyID ? 'bg-gray-50' : 'hover:bg-gray-50'
+        id() === propertyID ? 'bg-green-100' : 'hover:bg-gray-200'
 
 
 
