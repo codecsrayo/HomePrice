@@ -1,15 +1,24 @@
-import { createSignal } from 'solid-js'
+import { createSignal, createEffect } from 'solid-js'
+import type { Accessor, Setter } from 'solid-js'
 
-export const getSearchParams = (init: string) => {
+export const getSearchParams = (init: string): [Accessor<string>, Setter<string>] => {
     const [search, setSearch] = createSignal(init)
+
     if (typeof window !== 'undefined') {
-        window.addEventListener('popstate', () => {
-            const location = window.location
-            const params = new URLSearchParams(location.search)
-            setSearch(params.get('id') || '')
+        createEffect(() => {
+            const updateSearch = () => {
+                const params = new URLSearchParams(window.location.search)
+                setSearch(params.get('id') || '')
+            }
+
+            window.addEventListener('popstate', updateSearch)
+            updateSearch()
+
+            return () => window.removeEventListener('popstate', updateSearch)
         })
     }
-    return search
+
+    return [search, setSearch]
 }
 
 export const properCase = (str: string) =>

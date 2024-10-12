@@ -15,7 +15,7 @@ type PropertyFormData = {
     price: number;
 };
 
-const PropertyForm = () => {
+const PropertyForm = (props:{ setId:(cardId: string)=>void }) => {
     const queryClient = useQueryClient();
     const [formData, setFormData] = createSignal<PropertyFormData>({
         address: "",
@@ -44,7 +44,8 @@ const PropertyForm = () => {
         },
         onSuccess: (data)=>{
             queryClient.invalidateQueries({queryKey:["chats"]})
-            // window.location.href = `./?id=${data?.id}`
+            props.setId(data?.id)
+
         }
     }));
 

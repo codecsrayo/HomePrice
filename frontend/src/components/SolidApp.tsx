@@ -10,7 +10,8 @@ import {
     Show,
     Suspense,
     createContext,
-    useContext
+    useContext,
+    createSignal
 } from 'solid-js'
 import { isServer } from 'solid-js/web'
 import { getSearchParams } from '../utils'
@@ -18,13 +19,14 @@ import PropertyForm from './Form'
 import { Link } from './Link'
 
 
-const PropertyIdContext = createContext<() => string>()
+const PropertyIdContext = createContext<[() => string, (id: string) => void]>()
 
 const usePropertyID = () => {
-    const id = useContext(PropertyIdContext)
-    if (!id) throw new Error('PropertyIdContext not found')
-    return id
+    const context = useContext(PropertyIdContext)
+    if (!context) throw new Error('PropertyIdContext not found')
+    return context
 }
+
 
 
 
@@ -33,13 +35,13 @@ const usePropertyID = () => {
 export const SolidApp = (props: { property?: string }) => {
     const client = new QueryClient()
 
-    const search = getSearchParams(props.property || '')
+    const [id, setId] = getSearchParams(props.property || '')
 
     return (
         <QueryClientProvider client={client}>
             <SolidQueryDevtools />
-            <Suspense fallback={'Loading'}>
-                <PropertyIdContext.Provider value={search}>
+            <Suspense fallback={<div class='flex w-full place-content-center'>Loading...</div>}>
+                <PropertyIdContext.Provider value={[id, setId]}>
                     <App />
                 </PropertyIdContext.Provider>
             </Suspense>
@@ -57,8 +59,7 @@ const App = () => {
 }
 
 const PropertyDetails = () => {
-    const id = usePropertyID()
-    console.log("id ", id())
+    const [id, setId] = usePropertyID()
     return (
         <div class="flex-1 flex">
             <Show when={id()}>
@@ -67,7 +68,7 @@ const PropertyDetails = () => {
                 </Suspense>
             </Show>
             <Show when={!id()}>
-                <PropertyForm />
+                <PropertyForm setId={setId} />
             </Show>
         </div>
     )
@@ -239,7 +240,7 @@ const PropertyCard = (props: { id: string }) => {
 }
 
 const SideNav = () => {
-    const id = usePropertyID()
+    const [id, setId] = usePropertyID()
 
     const chats = createQuery(() => ({
         queryKey: ['chats'],
@@ -287,7 +288,7 @@ const SideNav = () => {
                 <div class='grow'/>
 
                 <svg
-                    onclick={() => window.location.href = "./panel"}
+                    onclick={() => setId('')}
                     xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus h-6 w-6 stroke-black cursor-pointer hover:opacity-70" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <title>New Query</title>
