@@ -255,26 +255,47 @@ const SideNav = () => {
 
     const activeClass = (propertyID: string) =>
         id() === propertyID ? 'bg-gray-50' : 'hover:bg-gray-50'
-    interface NavItem {
-        navigate: string;
-        title: string;
-    }
 
 
 
     return (
         <div class="w-72 border-r flex flex-col px-2">
-            <div class="pt-3 pb-1 text-sm font-semibold flex w-full">
+            <div class="pt-3 pb-1 text-sm font-semibold flex w-full space-x-2">
                 <p class='grow'>Consultas</p>
-                <button
-                onclick={()=>window.location.href="./panel"} 
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus h-6 w-6 stroke-black" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M12 5l0 14" />
-                        <path d="M5 12l14 0" />
-                    </svg>
-                </button>
+                <svg
+                
+                    onClick={() => window.location.href = "./api/docs"}
+                    xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-api h-6 w-6 cursor-pointer hover:opacity-70" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <title>Get open api docs backend</title>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 13h5" />
+                    <path d="M12 16v-8h3a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-3" />
+                    <path d="M20 8v8" />
+                    <path d="M9 16v-5.5a2.5 2.5 0 0 0 -5 0v5.5" />
+                </svg>
+
+
+                <svg
+                    onClick={() => window.location.href = "./db"}
+                    xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database h-5 w-6 cursor-pointer hover:opacity-70" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <title>Get database client</title>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" />
+                    <path d="M4 6v6a8 3 0 0 0 16 0v-6" />
+                    <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
+                </svg>
+
+
+
+                <svg
+                    onclick={() => window.location.href = "./panel"}
+                    xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus h-6 w-6 stroke-black cursor-pointer hover:opacity-70" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <title>New Query</title>
+                    <path d="M12 5l0 14" />
+                    <path d="M5 12l14 0" />
+                </svg>
+
             </div>
 
             <div class="flex-1 overflow-auto flex flex-col gap-1">
