@@ -154,7 +154,7 @@ const PropertyCard = (props: { id: string }) => {
 
                                     Predicted Price:
                                 </span>
-                                <span class="text-green-700 font-semibold">${property.data.predicted_price.toLocaleString()}</span>
+                                <span class="text-green-700 font-semibold">${property.data?.predicted_price.toLocaleString()}</span>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
@@ -228,7 +228,7 @@ const PropertyCard = (props: { id: string }) => {
                                     </svg>
                                     Predition date
                                 </span>
-                                <span class="text-gray-800 font-semibold">{String(property.data.prediction_date).replace("T", " ").substring(0, 19)}</span>
+                                <span class="text-gray-800 font-semibold">{String(property.data?.prediction_date).replace("T", " ").substring(0, 19)}</span>
                             </div>
                         </div>
                     </div>
@@ -312,7 +312,7 @@ const SideNav = () => {
                                     {item.bedrooms} beds, {item.bathrooms} baths
                                 </span>
                                 <span class="text-xs text-zinc-600">
-                                    Price: ${item.price.toLocaleString()} - Predicted: ${item.prediction.predicted_price.toLocaleString()}
+                                    Price: ${item.price.toLocaleString()} - Predicted: ${item?.prediction?.predicted_price.toLocaleString()}
                                 </span>
                             </div>
                         </Link>
