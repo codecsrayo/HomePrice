@@ -1,113 +1,15 @@
 ---
-import Footer from "@components/Footer.astro";
-import Header from "@components/Header.astro";
-import PanelBase from "@components/panel/Panel.jsx";
-
 import Layout from "@layouts/Layout.astro";
-import data from "demo.json";
+import { SolidApp } from "../components/SolidApp";
 
-interface NavItem {
-    navigate: string;
+interface Props {
     title: string;
+    id: string;
 }
 
-const navItems: NavItem[] = [
-    { navigate: "/", title: "Inicio" },
-    { navigate: "/db", title: "DB-Client" },
-    { navigate: "/api/docs", title: "backend" },
-    { navigate: "/docs/about", title: "Documentación" },
-];
+const { id } = Astro.props;
 ---
 
 <Layout title="Panel">
-    <div class="grid">
-        <Header Navigate={navItems} />
-        <main>
-            <PanelBase client:only="solid-js" data={data} />
-        </main>
-
-        <Footer />
-    </div>
+    <SolidApp property={id} client:load />
 </Layout>
-
-<style is:global>
-    html,
-    body {
-        height: 100%;
-        overflow: hidden;
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: 200px auto;
-        grid-template-rows: 40px 1fr 30px;
-        grid-template-areas:
-            "header header"
-            "main main"
-            "footer footer";
-        min-height: 100vh;
-        column-gap: 3px;
-        row-gap: 2px;
-    }
-
-    .page-header {
-        grid-area: header;
-    }
-
-    .page-leftbar {
-        grid-area: leftbar;
-        overflow-y: auto;
-    }
-
-    .page-footer {
-        grid-area: footer;
-    }
-
-    .content {
-        color: #242424;
-        background: #242424;
-        font-weight: 600;
-        text-align: center;
-        box-sizing: border-box;
-        height: 100%;
-        padding: 10px;
-    }
-
-    /* Media Queries */
-    @media (max-width: 600px) {
-        .grid {
-            grid-template-columns: 1fr;
-            grid-template-areas:
-                "header"
-                "main"
-                "footer";
-        }
-    }
-
-    @media (min-width: 601px) and (max-width: 992px) {
-        .grid {
-            grid-template-columns: 150px auto;
-            grid-template-areas:
-                "header header"
-                "main main"
-                "footer footer";
-        }
-    }
-
-    @media (min-width: 993px) {
-        .grid {
-            grid-template-columns: 200px auto;
-        }
-    }
-
-    aside {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-
-    .page-main > .content {
-        display: flex;
-        place-content: center;
-        padding: 100px;
-    }
-</style>

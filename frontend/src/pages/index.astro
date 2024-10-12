@@ -1,147 +1,111 @@
 ---
-import Header from "@components/Header.astro";
 import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout title="Binvenido a precios de viviendas">
-    <Header Navigate={[{ navigate: "/docs/about", title: "Documentación" }]} />
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="header-left">
-                    <h1>HomePrice</h1>
-                    <p class="subtitle">
+    <html lang="es" class="bg-gray-900 text-gray-100 scroll-smooth">
+        <head>
+            <meta charset="UTF-8" />
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+            />
+            <title>HomePrice - Predicción de precios de viviendas con IA</title>
+        </head>
+        <body
+            class="bg-gray-50 text-gray-800 min-h-screen flex flex-col justify-between p-4"
+        >
+            <header class="py-4 animate-fade-in">
+                <nav
+                    class="container mx-auto flex justify-between items-center"
+                >
+                    <a href="/panel" class="text-2xl font-bold text-primary"
+                        >HomePrice</a
+                    >
+                </nav>
+            </header>
+
+            <main class="flex-grow container mx-auto max-w-4xl text-center">
+                <section class="mb-16 animate-slide-up">
+                    <h1
+                        class="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
+                    >
+                        HomePrice
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-600">
                         Predicción de precios de viviendas con IA
                     </p>
-                    <a class="cta-button" href="/panel">PROBAR</a>
-                </div>
-                <div class="header-right"></div>
-            </div>
-            <link
-                href="https://fonts.googleapis.com/icon?family=Material+Icons"
-                rel="stylesheet"
-            />
-        </header>
-        <main>
-            <p class="description">
-                HomePrice es una aplicación web diseñada para predecir los
-                precios de las viviendas utilizando técnicas avanzadas de
-                aprendizaje automático. Implementa un modelo de regresión que
-                analiza diversas características de las propiedades para estimar
-                su valor de mercado, contribuyendo así al desarrollo sostenible
-                urbano y la transparencia en el mercado inmobiliario.
-            </p>
-        </main>
-    </div>
+                    <button
+                        onclick="window.location.href='/panel'"
+                        class="bg-accent text-white font-bold py-2 px-6 rounded-sm hover:bg-opacity-90 transition duration-300 ease-in-out transform hover:scale-105 mb-12"
+                    >
+                        PROBAR
+                    </button>
+                    <div
+                        class="bg-white p-8 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl border border-slate-200 hover:-translate-y-1 cursor-pointer animate-slide-up"
+                    >
+                        <p class="text-lg leading-relaxed text-gray-700">
+                            HomePrice es una aplicación web diseñada para
+                            predecir los precios de las viviendas utilizando
+                            técnicas avanzadas de aprendizaje automático.
+                            Implementa un modelo de regresión que analiza
+                            diversas características de las propiedades para
+                            estimar su valor de mercado, contribuyendo así al
+                            desarrollo sostenible urbano y la transparencia en
+                            el mercado inmobiliario.
+                        </p>
+                    </div>
+                </section>
+
+                <section id="caracteristicas" class="mb-16 animate-slide-up">
+                    <h2 class="text-3xl font-bold mb-8 text-primary">
+                        Características
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div
+                            class="bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-slate-200 cursor-pointer"
+                        >
+                            <h3
+                                class="text-xl font-semibold mb-2 text-secondary"
+                            >
+                                Predicción Precisa
+                            </h3>
+                            <p class="text-gray-700">
+                                Utilizamos algoritmos de IA avanzados para
+                                proporcionar estimaciones precisas de precios de
+                                viviendas.
+                            </p>
+                        </div>
+                        <div
+                            class="bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-slate-200 cursor-pointer"
+                        >
+                            <h3
+                                class="text-xl font-semibold mb-2 text-secondary"
+                            >
+                                Análisis de Datos
+                            </h3>
+                            <p class="text-gray-700">
+                                Analizamos múltiples factores para ofrecer una
+                                visión completa del mercado inmobiliario.
+                            </p>
+                        </div>
+                        <div
+                            class="bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-slate-200 cursor-pointer"
+                        >
+                            <h3
+                                class="text-xl font-semibold mb-2 text-secondary"
+                            >
+                                Fácil de Usar
+                            </h3>
+                            <p class="text-gray-700">
+                                Interfaz intuitiva que permite a cualquier
+                                usuario obtener predicciones de precios
+                                rápidamente.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </body>
+    </html>
 </Layout>
-<style>
-    /* Estilos generales */
-    body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(90deg, #242424, #585555);
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 100px;
-        padding: 2rem;
-    }
-
-    header {
-        margin-bottom: 2rem;
-    }
-
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    .header-left h1 {
-        font-size: 3rem;
-        font-weight: 300;
-        margin: 0 0 0.5rem 0;
-    }
-
-    .subtitle {
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
-    }
-
-    .cta-button {
-        background-color: #ff5722;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .cta-button:hover {
-        background-color: #ff7043;
-    }
-
-    .header-right {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .stat {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-
-    .stat-description {
-        font-size: 0.875rem;
-        opacity: 0.7;
-    }
-    a {
-        text-decoration: none;
-    }
-    main {
-        border-top: 1px solid #fffefe;
-        padding-top: 2rem;
-    }
-
-    .description {
-        max-width: 800px;
-        margin: 0 auto;
-        text-align: center;
-        font-size: 1.1rem;
-        font-size: medium;
-    }
-
-    /* Estilos responsivos */
-    @media (max-width: 768px) {
-        .header-content {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .header-left,
-        .header-right {
-            width: 100%;
-            text-align: center;
-        }
-
-        .header-right {
-            margin-top: 2rem;
-        }
-
-        .stat {
-            justify-content: center;
-        }
-    }
-</style>
