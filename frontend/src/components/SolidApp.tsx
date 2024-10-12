@@ -261,10 +261,9 @@ const SideNav = () => {
     return (
         <div class="w-72 border-r flex flex-col px-2">
             <div class="pt-3 pb-1 text-sm font-semibold flex w-full space-x-2">
-                <p class='grow'>Consultas</p>
                 <svg
                 
-                    onClick={() => window.location.href = "./api/docs"}
+                    onClick={() => window.open("./api/docs", "_blank")}
                     xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-api h-6 w-6 cursor-pointer hover:opacity-70" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <title>Get open api docs backend</title>
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -276,7 +275,7 @@ const SideNav = () => {
 
 
                 <svg
-                    onClick={() => window.location.href = "./db"}
+                    onClick={() => window.open("./db", "_blank")}
                     xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database h-5 w-6 cursor-pointer hover:opacity-70" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <title>Get database client</title>
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -285,7 +284,7 @@ const SideNav = () => {
                     <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
                 </svg>
 
-
+                <div class='grow'/>
 
                 <svg
                     onclick={() => window.location.href = "./panel"}
