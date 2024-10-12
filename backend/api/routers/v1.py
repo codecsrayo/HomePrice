@@ -52,7 +52,7 @@ async def get_all_predict(
     query = (
         select(Property, Prediction)
         .outerjoin(Prediction, Property.id == Prediction.property_id)
-        .order_by(Property.id)
+        .order_by(Prediction.prediction_date.desc())
     )
     
     result = await db_session.execute(query)
