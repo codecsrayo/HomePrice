@@ -97,11 +97,11 @@ const PropertyForm = (props:{ setId:(cardId: string)=>void }) => {
                             }`}
                         disabled={submitMutation.isPending}
                     >
-                        {submitMutation.isPending ? "Loading..." : "Enviar"}
+                        {submitMutation.isPending ? "Loading..." : "Send"}
                     </button>
                 </div>
-                {submitMutation.isError && <p class="text-red-600 mt-2">Error al enviar los datos.</p>}
-                {submitMutation.isSuccess && <p class="text-green-600 mt-2">Datos enviados con éxito.</p>}
+                {submitMutation.isError && <p class="text-red-600 mt-2">Error to send.</p>}
+                {submitMutation.isSuccess && <p class="text-green-600 mt-2">Data send.</p>}
             </form>
         </div>
     );
