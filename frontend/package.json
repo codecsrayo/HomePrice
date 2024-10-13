@@ -12,7 +12,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.3",
     "@astrojs/node": "^8.3.4",
-    "@astrojs/preact": "^3.5.3",
     "@astrojs/solid-js": "^4.4.2",
     "@astrojs/tailwind": "^5.1.1",
     "@tanstack/solid-query": "^5.59.6",
