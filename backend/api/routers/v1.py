@@ -25,13 +25,13 @@ async def predict(data: Property, db_session: AsyncSession = Depends(deps.get_db
 
     predict_price = model.predict(
         np.array([[
-    data.bedrooms,
-    data.bathrooms,
-    data.square_feet,
-    data.lot_size,
-    data.year_built
-    ]]
-    ))[0]
+        int(data.bedrooms),
+        float(data.bathrooms),
+        float(data.square_feet),
+        float(data.lot_size),
+        int(data.year_built)
+    ]], dtype=np.float32)
+    )[0]
 
 
 
