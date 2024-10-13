@@ -8,14 +8,9 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from api.models import CRUDBase, Prediction, Property
 from api.routers import deps
+from api.ia_binaries import model
+import numpy as np
 
-from .common import (
-    IPostResponseBase,
-    IGetResponseBase,
-    # IDeleteResponseBase,
-    # IPutResponseBase,
-    # IResponseBase
-)
 
 router = APIRouter()
 
@@ -28,10 +23,22 @@ async def predict(data: Property, db_session: AsyncSession = Depends(deps.get_db
     data.id =  uuid_pkg.uuid4()
     save_property = await CRUDBase(Property).create(db_session=db_session, obj_in=data)
 
+    predict_price = model.predict(
+        np.array([[
+    data.bedrooms,
+    data.bathrooms,
+    data.square_feet,
+    data.lot_size,
+    data.year_built
+    ]]
+    ))[0]
+
+
+
     data_predict =Prediction(
       id=uuid_pkg.uuid4(),
       property_id=save_property.id, 
-      predicted_price=20.0,
+      predicted_price=float(predict_price), 
 
     )
 
