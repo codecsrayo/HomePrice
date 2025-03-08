@@ -20,7 +20,7 @@ RUN poetry config virtualenvs.create false
 COPY backend/pyproject.toml backend/poetry.lock ./
 
 # Install dependencies
-RUN poetry install --no-interaction
+RUN poetry install --no-interaction --no-root
 
 # Clean up
 RUN rm -rf /root/.cache/pypoetry
